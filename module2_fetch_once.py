@@ -1,3 +1,4 @@
+import argparse
 import json
 from pathlib import Path
 
@@ -11,17 +12,24 @@ VISITOR_MODE = False
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="One-shot Upwork GraphQL fetch")
+    parser.add_argument("--query", dest="query", default=None, help="Override Upwork search query")
+    args = parser.parse_args()
+
     if not CAPTURE_FILE.exists():
         print("Capture file not found: data/cookies.py")
         return
 
     print("=== Module 2: One-Shot GraphQL Fetch (Project Integrated) ===")
     print(f"Visitor mode: {VISITOR_MODE}")
+    if args.query:
+        print(f"Query override: {args.query}")
 
     result = fetch_once(
         capture_file=CAPTURE_FILE,
         upwork_url=UPWORK_URL,
         visitor_mode=VISITOR_MODE,
+        user_query=args.query,
         use_playwright_on_403=True,
         use_seleniumbase_on_403=True,
     )

@@ -16,6 +16,19 @@ class FetchResult:
     response_text: str
     body: dict | None
 
+#dynamic Allocation of Search QUERY 
+def apply_query_override(payload: dict, user_query: str | None) -> dict:
+    if not user_query:
+        return payload
+
+    updated = dict(payload)
+    variables = dict(updated.get("variables", {}))
+    request_variables = dict(variables.get("requestVariables", {}))
+    request_variables["userQuery"] = user_query
+    variables["requestVariables"] = request_variables
+    updated["variables"] = variables
+    return updated
+
 
 def best_auth_token(cookies: dict, headers: dict) -> str | None:
     token_candidates = []
@@ -102,6 +115,20 @@ def post_with_cloudscraper(url: str, params: dict, cookies: dict, headers: dict,
     return scraper.post(url, params=params, cookies=cookies, headers=headers, json=payload, timeout=40)
 
 
+def safe_post_with_cloudscraper(url: str, params: dict, cookies: dict, headers: dict, payload: dict) -> tuple[requests.Response | None, str | None]:
+    try:
+        return post_with_cloudscraper(url, params, cookies, headers, payload), None
+    except requests.RequestException as exc:
+        return None, f"cloudscraper request failed: {exc}"
+
+
+def safe_post_with_requests(url: str, params: dict, cookies: dict, headers: dict, payload: dict) -> tuple[requests.Response | None, str | None]:
+    try:
+        return post_with_requests(url, params, cookies, headers, payload), None
+    except requests.RequestException as exc:
+        return None, f"requests fallback failed: {exc}"
+
+
 def is_cloudflare_challenge(response: requests.Response) -> bool:
     if response.status_code != 403:
         return False
@@ -121,6 +148,7 @@ def fetch_once(
     capture_file: Path,
     upwork_url: str,
     visitor_mode: bool = False,
+    user_query: str | None = None,
     use_playwright_on_403: bool = True,
     use_seleniumbase_on_403: bool = True,
 ) -> FetchResult:
@@ -138,30 +166,70 @@ def fetch_once(
             body=None,
         )
 
+    payload = apply_query_override(payload, user_query)
+
     headers = normalize_headers(cookies, headers, visitor_mode)
     if visitor_mode:
         cookies, headers = to_visitor_session(cookies, headers)
 
-    response = post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
+    response, error = safe_post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
     client_used = "cloudscraper"
+
+    if response is None:
+        fallback_response, fallback_error = safe_post_with_requests(upwork_url, params, cookies, headers, payload)
+        if fallback_response is None:
+            return FetchResult(
+                status_code=0,
+                client_used="none",
+                response_text=f"{error}\n{fallback_error}",
+                body=None,
+            )
+        response = fallback_response
+        client_used = "requests"
 
     if is_cloudflare_challenge(response):
         if use_playwright_on_403:
             refreshed = refresh_cookies_with_playwright("https://www.upwork.com/nx/search/jobs/")
             if refreshed:
                 cookies = merge_cookie_updates(cookies, refreshed)
-                response = post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
-                client_used = "cloudscraper+playwright-retry"
+                retried, retry_error = safe_post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
+                if retried is not None:
+                    response = retried
+                    client_used = "cloudscraper+playwright-retry"
+                else:
+                    return FetchResult(
+                        status_code=0,
+                        client_used="cloudscraper+playwright-retry",
+                        response_text=retry_error or "cloudscraper retry failed",
+                        body=None,
+                    )
 
         if use_seleniumbase_on_403 and is_cloudflare_challenge(response):
             refreshed = refresh_cookies_with_seleniumbase("https://www.upwork.com/nx/search/jobs/")
             if refreshed:
                 cookies = merge_cookie_updates(cookies, refreshed)
-                response = post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
-                client_used = "cloudscraper+seleniumbase-retry"
+                retried, retry_error = safe_post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
+                if retried is not None:
+                    response = retried
+                    client_used = "cloudscraper+seleniumbase-retry"
+                else:
+                    return FetchResult(
+                        status_code=0,
+                        client_used="cloudscraper+seleniumbase-retry",
+                        response_text=retry_error or "cloudscraper retry failed",
+                        body=None,
+                    )
 
     if response.status_code in {408, 502, 503, 504}:
-        response = post_with_requests(upwork_url, params, cookies, headers, payload)
+        fallback_response, fallback_error = safe_post_with_requests(upwork_url, params, cookies, headers, payload)
+        if fallback_response is None:
+            return FetchResult(
+                status_code=0,
+                client_used="requests",
+                response_text=fallback_error or "requests fallback failed",
+                body=None,
+            )
+        response = fallback_response
         client_used = "requests"
 
     try:
