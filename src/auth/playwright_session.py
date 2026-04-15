@@ -2,7 +2,20 @@
 
 from __future__ import annotations
 
+import asyncio
+import sys
 from typing import Dict
+
+
+def _apply_windows_proactor_policy() -> None:
+    # Playwright needs subprocess support on Windows.
+    # If something switched the loop to Selector, restore Proactor here.
+    if sys.platform != "win32":
+        return
+    try:
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    except Exception:
+        pass
 
 
 def refresh_cookies_with_playwright(url: str, timeout_seconds: int = 25) -> Dict[str, str]:
@@ -11,6 +24,8 @@ def refresh_cookies_with_playwright(url: str, timeout_seconds: int = 25) -> Dict
 
     Use this only as 403 recovery. Do not call on every polling cycle.
     """
+    _apply_windows_proactor_policy()
+
     try:
         from playwright.sync_api import sync_playwright
     except Exception as exc:
@@ -18,6 +33,9 @@ def refresh_cookies_with_playwright(url: str, timeout_seconds: int = 25) -> Dict
         return {}
 
     cookies: Dict[str, str] = {}
+    browser = None
+    context = None
+    page = None
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
@@ -36,11 +54,26 @@ def refresh_cookies_with_playwright(url: str, timeout_seconds: int = 25) -> Dict
                 value = item.get("value")
                 if name and value:
                     cookies[str(name)] = str(value)
-            context.close()
-            browser.close()
     except BaseException as exc:
         print(f"Playwright refresh failed (non-fatal): {exc}")
         return {}
+    finally:
+        # Close in leaf-to-root order and swallow shutdown noise.
+        try:
+            if page is not None:
+                page.close()
+        except Exception:
+            pass
+        try:
+            if context is not None:
+                context.close()
+        except Exception:
+            pass
+        try:
+            if browser is not None:
+                browser.close()
+        except Exception:
+            pass
 
     print(f"Playwright captured {len(cookies)} cookies")
     return cookies

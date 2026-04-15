@@ -4,7 +4,6 @@ from pathlib import Path
 import cloudscraper
 import requests
 
-from src.auth.playwright_session import refresh_cookies_with_playwright
 from src.auth.seleniumbase_session import refresh_cookies_with_seleniumbase
 from src.upwork.capture_loader import load_capture_dicts
 
@@ -149,7 +148,6 @@ def fetch_once(
     upwork_url: str,
     visitor_mode: bool = False,
     user_query: str | None = None,
-    use_playwright_on_403: bool = True,
     use_seleniumbase_on_403: bool = True,
 ) -> FetchResult:
     data = load_capture_dicts(capture_file)
@@ -188,26 +186,12 @@ def fetch_once(
         client_used = "requests"
 
     if is_cloudflare_challenge(response):
-        if use_playwright_on_403:
-            refreshed = refresh_cookies_with_playwright("https://www.upwork.com/nx/search/jobs/")
-            if refreshed:
-                cookies = merge_cookie_updates(cookies, refreshed)
-                retried, retry_error = safe_post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
-                if retried is not None:
-                    response = retried
-                    client_used = "cloudscraper+playwright-retry"
-                else:
-                    return FetchResult(
-                        status_code=0,
-                        client_used="cloudscraper+playwright-retry",
-                        response_text=retry_error or "cloudscraper retry failed",
-                        body=None,
-                    )
-
-        if use_seleniumbase_on_403 and is_cloudflare_challenge(response):
+        if use_seleniumbase_on_403:
             refreshed = refresh_cookies_with_seleniumbase("https://www.upwork.com/nx/search/jobs/")
             if refreshed:
                 cookies = merge_cookie_updates(cookies, refreshed)
+                # After refresh, re-align headers with new cookies
+                headers = normalize_headers(cookies, headers, visitor_mode)
                 retried, retry_error = safe_post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
                 if retried is not None:
                     response = retried
@@ -219,6 +203,95 @@ def fetch_once(
                         response_text=retry_error or "cloudscraper retry failed",
                         body=None,
                     )
+
+    if response.status_code in {408, 502, 503, 504}:
+        fallback_response, fallback_error = safe_post_with_requests(upwork_url, params, cookies, headers, payload)
+        if fallback_response is None:
+            return FetchResult(
+                status_code=0,
+                client_used="requests",
+                response_text=fallback_error or "requests fallback failed",
+                body=None,
+            )
+        response = fallback_response
+        client_used = "requests"
+
+    try:
+        body = response.json() if response.status_code == 200 else None
+    except ValueError:
+        body = None
+
+    return FetchResult(
+        status_code=response.status_code,
+        client_used=client_used,
+        response_text=response.text,
+        body=body,
+    )
+
+
+def build_search_url(query: str | None = None) -> str:
+    """Build Upwork job search URL for browser navigation."""
+    base_url = "https://www.upwork.com/nx/search/jobs/"
+    if query:
+        return f"{base_url}?q={query.replace(' ', '+')}"
+    return base_url
+
+
+def fetch_from_capture_data(
+    capture_data: dict,
+    upwork_url: str,
+    user_query: str | None = None,
+    visitor_mode: bool = False,
+    use_seleniumbase_on_403: bool = True,
+) -> FetchResult:
+    """
+    Fetch jobs from capture data dict (used by polling loop).
+    Wrapper around fetch_once() that accepts pre-loaded capture data.
+    """
+    cookies = capture_data.get("cookies", {})
+    headers = capture_data.get("headers", {})
+    params = capture_data.get("params", {})
+    payload = capture_data.get("json_data", {})
+
+    if not cookies or not payload:
+        return FetchResult(
+            status_code=0,
+            client_used="none",
+            response_text="Capture data incomplete. Need cookies + json_data.",
+            body=None,
+        )
+
+    payload = apply_query_override(payload, user_query)
+    headers = normalize_headers(cookies, headers, visitor_mode)
+    
+    if visitor_mode:
+        cookies, headers = to_visitor_session(cookies, headers)
+
+    response, error = safe_post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
+    client_used = "cloudscraper"
+
+    if response is None:
+        fallback_response, fallback_error = safe_post_with_requests(upwork_url, params, cookies, headers, payload)
+        if fallback_response is None:
+            return FetchResult(
+                status_code=0,
+                client_used="none",
+                response_text=f"{error}\n{fallback_error}",
+                body=None,
+            )
+        response = fallback_response
+        client_used = "requests"
+
+    if is_cloudflare_challenge(response):
+
+        if use_seleniumbase_on_403 and is_cloudflare_challenge(response):
+            refreshed = refresh_cookies_with_seleniumbase("https://www.upwork.com/nx/search/jobs/")
+            if refreshed:
+                cookies = merge_cookie_updates(cookies, refreshed)
+                retried, retry_error = safe_post_with_cloudscraper(upwork_url, params, cookies, headers, payload)
+                if retried is not None:
+                    response = retried
+                    client_used = "cloudscraper+seleniumbase-retry"
 
     if response.status_code in {408, 502, 503, 504}:
         fallback_response, fallback_error = safe_post_with_requests(upwork_url, params, cookies, headers, payload)

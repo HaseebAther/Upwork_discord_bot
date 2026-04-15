@@ -26,3 +26,17 @@ downloaded_files/
 module1_auth_check.py
 module1_request_preview.py
 module2_fetch_once.py
+simple_capture.py
+
+# Obsolete/old files
+extract_old_query.py
+old_cookies.py
+old_cookies_text.txt
+old_job_search_client.py
+REPORT_2026_04_15.md
+auth_manager.py
+
+# Local runtime database
+data/*.db
+data/*.db-wal
+data/*.db-shm
