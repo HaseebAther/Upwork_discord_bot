@@ -1,0 +1,12 @@
+{
+  "queries": {
+    "web development": false,
+    "python automation": false,
+    "selenium": false,
+    "python developer": false,
+    "wordpress developer": true,
+    "wordpress": false,
+    "saas development": true
+  },
+  "polling_interval": 120
+}

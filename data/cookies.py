@@ -1,45 +1,11 @@
 """
-Auto-captured Upwork session (refreshed via SeleniumBase localStorage extraction)
-DO NOT EDIT - regenerate with: python refresh_session.py
-Bearer token extracted from: window.localStorage or window.sessionStorage
+Upwork session capture — updated automatically on session refresh.
 """
 
-cookies = {
-    "_vwo_uuid": "D9DBA5F01D298F8E761ACAF47F08E597E",
-    "AWSALBTGCORS": "umMwCFtCHE0gI7pKvc8F7BlOhs3OxgP7YJquv23i5Fi1NboE6oNUZNikjYdHjw/6hMvOsITj5ABFN+wqa/yFyuHFgPTnAoG+uV6Twy8+q2XGHS3D+6YWul4WtN608u7zdVZ9MZbj/Y75AhQD3NxMqU6PS+J4Z6j9uS38RzQlfxYZ",
-    "_vwo_sn": "0%3A1%3A%3A%3A%3A%3A1",
-    "enabled_ff": "!CI12577UniversalSearch,!CmpLibOn,!Fluid,!MP16400Air3Migration,!SSINavUser,!i18nGA,CI17409DarkModeUI,JPAir3,OTBnrOn,SSINavUserBpa,TONB2256Air3Migration,i18nOn",
-    "__cflb": "02DiuEXPXZVk436fJfSVuuwDqLqkhavJbPHAME55JKaf5",
-    "_cfuvid": "YMRq6cfzKX2LKJ_T3mtVZdQdsaqZRdT73Jjt3YZ8j3A-1776271557.6866994-1.0.1.1-0xwYrG6ZpToelORN95n7F.aM_iVHk3P14o02cYHm55Y",
-    "_vis_opt_s": "1%7C",
-    "cookie_domain": ".upwork.com",
-    "_vis_opt_test_cookie": "1",
-    "AWSALBTG": "umMwCFtCHE0gI7pKvc8F7BlOhs3OxgP7YJquv23i5Fi1NboE6oNUZNikjYdHjw/6hMvOsITj5ABFN+wqa/yFyuHFgPTnAoG+uV6Twy8+q2XGHS3D+6YWul4WtN608u7zdVZ9MZbj/Y75AhQD3NxMqU6PS+J4Z6j9uS38RzQlfxYZ",
-    "visitor_id": "223.123.3.123.1776271557832000",
-    "visitor_gql_token": "oauth2v2_int_236060395d3d37cdcec4cfa805189ae3",
-    "country_code": "PK",
-    "_vwo_uuid_v2": "D9DBA5F01D298F8E761ACAF47F08E597E|b1e2453cbd6efd2fd76989a58db49f5c",
-    "__cf_bm": "UKNftcZwCwoDdCPVw5mmEpbPYcjRijNuIx2Lb1GUdaA-1776271574.115243-1.0.1.1-ucxWVpR1oKhiXnln9bn0SBnssvg9LVUxmb9xGeuibhq3YO5cu.9B8rr4FbJ1OfReE4LYqZp7wno3unJoO2jnyAUs0Y7tl4ZaFLNomQOnXKlLGJGMqRSFRpxdQPmXihMW",
-    "_vwo_ds": "3%241776271559%3A97.41179329%3A%3A%3A%3A%3A1776271559%3A1776271559%3A1"
-}
+cookies = {'AWSALB': 'eHepRdR7Zy7HuqepDjg+OVXzSaYWhLZmQt+RFhOM2BvnfC19Dr2Dv/yG6BgSUpPE6vGtp4KhKSoFwbRUiOFJS+EuS4u6eI0ySqEI58/QwqcI/x4MjG7cWsHmI+v+', '__ps_slu': 'https://www.upwork.com/nx/search/jobs/?__cf_chl_tk=yzvOcwDHsgAUJ8kWSmrangZjsuj5dcRX4g.e6vw6Y6k-1776411994-1.0.1.1-0xuQn7VVjrprv3geXr89AcAsxMG5FFEga7se1TWKi78', 'visitor_id': '119.157.134.146.1776411989059000', 'AWSALBCORS': 'eHepRdR7Zy7HuqepDjg+OVXzSaYWhLZmQt+RFhOM2BvnfC19Dr2Dv/yG6BgSUpPE6vGtp4KhKSoFwbRUiOFJS+EuS4u6eI0ySqEI58/QwqcI/x4MjG7cWsHmI+v+', '_tt_enable_cookie': '1', '_upw_ses.5831': '*', '__ps_did': 'pscrb_33ca14ab-1437-46a7-99a2-eee55774164b', '_cq_duid': '1.1776411995.mA6V36ddU6KEOr0T', 'x-spec-id': '02b7e8c5-7c51-403f-8817-3c56dc823abf', '_cq_session': '1.1776411995500.nAMZipBhtjlNAQ6k.1776412004991', 'AWSALBTG': '6H0jsw6yPJMHwJoGimheI/Okgc4elhJJESg0PVySDfpmTtmlJMKz/XwH2zOjOd4cOkLACSH8H+g0lPWriChXSTugh+N26lTmRAy5rma1VQFXX0FFf0/2zfI8kGOb9VEC9qiGwBsrlyOoKw7jrBk/HHzohMsBvBjGSjUL3HbOXoFB', '__ps_sr': '_', '__ps_lu': 'https://www.upwork.com/nx/search/jobs/?__cf_chl_tk=yzvOcwDHsgAUJ8kWSmrangZjsuj5dcRX4g.e6vw6Y6k-1776411994-1.0.1.1-0xuQn7VVjrprv3geXr89AcAsxMG5FFEga7se1TWKi78', '__cf_bm': 'dOvXqCQZdtkgBB_8EWSWo5plDjc6zlvUk_ZwRJV501o-1776412003.1065345-1.0.1.1-7reQ2xSRFy2a0tFJeX7pEr0_mxH7lRdlTdXBWo7i6EeCLri1Ja7vzYmRoLbVpuZB7wEsJt2cLBjFwOUkMKUhUfXsUI5e69REOGu4lnWraLwolEAT55qocciI6qWc4UV_', 'ttcsid': '1776369284463::5vPliboxH2OUgkGtBLRa.1.1776369294498.0::1.-12010.0::0.0.0.0::58578.4.560', 'forterToken': '5c9bbcd89e99433db7eab4be28834b7a_1776412004051__UDF43-m4_23ck_WDNiJmA99/Q%3D-2795-v2', 'country_code': 'PK', '_cq_suid': '1.1776411995.ll5GkdENcPIiI9kk', '__ps_fva': '1776412010655', '__pdst': '38d1e33d3f684f37be49c4217e048cb9', 'cookie_domain': '.upwork.com', '__cflb': '02DiuEXPXZVk436fJfSVuuwDqLqkhavJbaCFw15ExgLfu', 'AWSALBTGCORS': '6H0jsw6yPJMHwJoGimheI/Okgc4elhJJESg0PVySDfpmTtmlJMKz/XwH2zOjOd4cOkLACSH8H+g0lPWriChXSTugh+N26lTmRAy5rma1VQFXX0FFf0/2zfI8kGOb9VEC9qiGwBsrlyOoKw7jrBk/HHzohMsBvBjGSjUL3HbOXoFB', 'cf_clearance': 'i8pOXwnxEmRZloKRCbXY8FBhS0fC378GXhTXnl5ONWM-1776412003-1.2.1.1-TV.m3S7kMMR40_qdrr9SAGXWgqanZrBgDJbPsqwZEmiWcWCbkXkwBw3wUT_vFiwdIqNJIz3H71lRsl9nE6slg_saz2s9u1C3AMu8__ybD5LVRE7zUaW5A.cXvFpgNLnMg1H8ZYi6WCOZP39pBptnWCWyN5IOtHFGsw1MblYPP1KKMkxR7d7dvYFpE9_jAlxXLRpxEKpiwKYVsOAon2OIK2Iq2vnSo54O9nOjk5oiHmQqLuKLDMxpz9bvIdRFTWUnYMZfTPg49_FFbs_zZXopPL5PRYzWSBadAGKmSxHfGjxdOsQBou3A90ZmrtJ5NAfFIvmls_Zmepva_NUrK_fHVw', '_rdt_uuid': '1776412008448.e1f7b977-99ed-485e-a0eb-b298f40c3064', '_cfuvid': 'zQcMplaPMCnMgwMG22OvC3C44xX1k_M6WIxCkuHxQOA-1776411988.9257262-1.0.1.1-o2kZBEGHPbrJnNJjvq4wXb.sNHKsQxCtEBTkL5M8Hic', 'OptanonConsent': 'consentId=7ba74fbc-db08-4ace-91b3-4709ea40ff54&datestamp=Fri+Apr+17+2026+12%3A46%3A45+GMT%2B0500+(Pakistan+Standard+Time)&version=202512.1.0&isAnonUser=1&isGpcEnabled=0&browserGpcFlag=0&isIABGlobal=false&identifierType=Cookie+Unique+Id&hosts=&interactionCount=0&landingPath=https%3A%2F%2Fwww.upwork.com%2Fnx%2Fsearch%2Fjobs%2F&groups=C0001%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1', '_twpid': 'tw.1776412010964.170234563613229826', '_uetsid': '1c869b2039ce11f1b4983d4e4aa765eb', 'IR_gbd': 'upwork.com', 'IR_13634': '1776369282788%7C0%7C1776369282788%7C%7C', '_ttp': '01KPBXRDATE480DTD6CY1SHDNQ_.tt.1', 'UniversalSearchNuxt_vt': 'oauth2v2_int_28ee1583ac072cf8b450b2dadfe27202', '_fbp': 'fb.1.1776412011838.87843000347275784', 'enabled_ff': '!CI12577UniversalSearch,!CmpLibOn,!Fluid,!MP16400Air3Migration,!SSINavUser,!i18nGA,CI17409DarkModeUI,JPAir3,OTBnrOn,SSINavUserBpa,TONB2256Air3Migration,i18nOn', 'cookie_prefix': '', 'spt': '825adcec-ba59-4c51-9bbb-2f275e781476', '__ps_r': '_', '_ga_KSM221PNDX': 'GS2.1.s1776412010$o1$g0$t1776412010$j60$l0$h0', 'ttcsid_CGCUGEBC77UAPU79F02G': '1776369284461::8vKg-mXlWrdo3_oeu8nz.1.1776369294500.1', '_upw_id.5831': '756b601f-ebf2-43b3-88ed-f81e741f83e7.1776412004.1.1776412006..9d49865c-245e-4c51-add8-a695c2faa993..e0845283-2221-4fe6-b1b9-94785b9d9180.1776412004133.13', '_gcl_au': '1.1.1257228783.1776411994', 'umq': '1424', '_uetvid': '1c86f52039ce11f1ab61cd3f517a90e7', '_ga': 'GA1.1.598435643.1776412011', 'visitor_gql_token': 'oauth2v2_int_a9329ff8634caf7e31c5c0e212903628', 'XSRF-TOKEN': 'G9YHUMjN9LyAP9dKA7zBD5PI4YgBmYDZ', '_vwo_uuid': 'D13AB58789CA2E6829016B77549B404B4', '_vwo_ds': '3%241776411989%3A51.59313099%3A%3A%3A%3A%3A1776411989%3A1776411989%3A1', 'g_state': '{"i_l":0,"i_ll":1776411467262,"i_b":"Y00XgYQPSNXludIq+8DbzBAx5ttmGCYjwxTVW4I7Nfc","i_e":{"enable_itp_optimization":0},"i_et":1776411467255}', '_vis_opt_s': '1%7C', '_vwo_sn': '0%3A1%3A%3A%3A%3A%3A2', '_vwo_uuid_v2': 'D13AB58789CA2E6829016B77549B404B4|34769a4395fc167ddf59c6be7a8b7231', '_vis_opt_test_cookie': '1'}
 
-headers = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Authorization": "Bearer oauth2v2_int_236060395d3d37cdcec4cfa805189ae3"
-}
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', 'Accept-Language': 'en-US,en;q=0.9', 'Authorization': 'Bearer oauth2v2_int_28ee1583ac072cf8b450b2dadfe27202'}
 
 params = {}
 
-json_data = {
-  "query": "\n  query VisitorJobSearch($requestVariables: VisitorJobSearchV1Request!) {\n    search {\n      universalSearchNuxt {\n        visitorJobSearchV1(request: $requestVariables) {\n          paging {\n            total\n            offset\n            count\n          }\n          results {\n            id\n            title\n            jobTile {\n              job {\n                id\n                ciphertext: cipherText\n                jobType\n                weeklyRetainerBudget\n                hourlyBudgetMin\n                hourlyBudgetMax\n                fixedPriceAmount {\n                  isoCurrencyCode\n                  amount\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n        ",
-  "variables": {
-    "requestVariables": {
-      "userQuery": "web development",
-      "paging": {
-        "offset": 0,
-        "count": 10
-      }
-    }
-  }
-}
+json_data = {'query': '\n  query VisitorJobSearch($requestVariables: VisitorJobSearchV1Request!) {\n    search {\n      universalSearchNuxt {\n        visitorJobSearchV1(request: $requestVariables) {\n          paging {\n            total\n            offset\n            count\n          }\n          results {\n            id\n            title\n            description\n            ontologySkills {\n              prefLabel\n            }\n            jobTile {\n              job {\n                id\n                ciphertext: cipherText\n                jobType\n                weeklyRetainerBudget\n                hourlyBudgetMin\n                hourlyBudgetMax\n                fixedPriceAmount {\n                  isoCurrencyCode\n                  amount\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n        ', 'variables': {'requestVariables': {'userQuery': 'web development', 'paging': {'offset': 0, 'count': 10}}}}

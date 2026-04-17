@@ -4,6 +4,13 @@ from typing import Any
 
 import requests
 
+from src.notifications.discord_formatter import JobEmbed, extract_full_job_data
+from src.notifications.channel_manager import (
+    JobChannelManager,
+    ChannelNameGenerator,
+    ThreadNameGenerator,
+)
+
 
 DISCORD_CONTENT_LIMIT = 2000
 DEFAULT_TIMEOUT_SECONDS = 20
@@ -32,36 +39,25 @@ def _job_url(job_id: str) -> str:
 
 
 def format_job_message(job: dict[str, Any], query: str | None = None) -> str:
-    title = _safe_text(job.get("title")) or "Untitled job"
-    job_id = _safe_text(job.get("id"))
-    job_type = _safe_text(job.get("job_type")) or "unknown"
-    budget = _safe_text(job.get("budget_display")) or "not specified"
-    publish_time = _safe_text(job.get("publish_time")) or "unknown"
-    preview = _safe_text(job.get("description_preview"))
-    skills = job.get("skills") if isinstance(job.get("skills"), list) else []
-    skill_text = ", ".join(_safe_text(skill) for skill in skills if _safe_text(skill))
-    skill_text = skill_text or "none listed"
-
-    lines = [
-        "New Upwork job found",
-        f"Query: {query or '(default)'}",
-        f"Title: {title}",
-        f"Type: {job_type}",
-        f"Budget: {budget}",
-        f"Published: {publish_time}",
-        f"Skills: {skill_text}",
-    ]
-
-    if preview:
-        lines.append(f"Preview: {preview}")
-
-    url = _job_url(job_id)
-    if url:
-        lines.append(f"Link: {url}")
-
-    message = "\n".join(lines)
+    """Format job message using the new Upwork-like formatter."""
+    embed = JobEmbed(job, query=query)
+    message = embed.format_compact_message()
+    
     if len(message) > DISCORD_CONTENT_LIMIT:
         message = message[: DISCORD_CONTENT_LIMIT - 3] + "..."
+    
+    return message
+
+
+def format_job_thread_message(job: dict[str, Any]) -> str:
+    """Format detailed message for thread posting."""
+    embed = JobEmbed(job)
+    message = embed.format_detail_message()
+    
+    if len(message) > DISCORD_CONTENT_LIMIT:
+        # Split into multiple messages if needed
+        message = message[: DISCORD_CONTENT_LIMIT - 3] + "..."
+    
     return message
 
 
@@ -104,16 +100,46 @@ def post_jobs_to_discord(
     query: str | None,
     max_posts: int = 5,
 ) -> dict[str, int]:
+    """
+    Post new jobs to Discord.
+    
+    Enhanced version that:
+    - Uses improved Upwork-like formatting
+    - Tracks job-to-channel mappings
+    - Handles jobs appearing in multiple queries
+    - Returns posting statistics
+    """
     if not webhook_url or not jobs:
         return {"attempted": 0, "sent": 0, "failed": 0}
 
     allowed = max(0, max_posts)
     selected_jobs = jobs[:allowed] if allowed else []
 
+    # Initialize channel manager
+    channel_manager = JobChannelManager()
+
     sent = 0
     failed = 0
+    new_channels = 0
+    reposted_to_queries = 0
 
     for job in selected_jobs:
+        job_id = str(job.get("id", ""))
+        
+        # Check if job already has a channel (appeared in different query)
+        is_new_job = channel_manager.is_job_new(job_id)
+        
+        if is_new_job:
+            # New job - create channel mapping
+            channel_name = ChannelNameGenerator.from_job(job)
+            channel_manager.register_job_channel(job_id, channel_name, query=query)
+            new_channels += 1
+        else:
+            # Job appearing in multiple queries
+            channel_manager.register_job_channel(job_id, "", query=query)  # Update query tracking
+            reposted_to_queries += 1
+        
+        # Format and send message
         message = format_job_message(job, query=query)
         ok, _detail = send_discord_webhook(webhook_url, message)
         if ok:
@@ -121,4 +147,26 @@ def post_jobs_to_discord(
         else:
             failed += 1
 
-    return {"attempted": len(selected_jobs), "sent": sent, "failed": failed}
+    return {
+        "attempted": len(selected_jobs),
+        "sent": sent,
+        "failed": failed,
+        "new_channels": new_channels,
+        "reposted_to_queries": reposted_to_queries,
+    }
+
+
+def post_job_details_to_thread(
+    webhook_url: str | None,
+    job: dict[str, Any],
+) -> tuple[bool, str]:
+    """
+    Post detailed job information to a thread.
+    Includes full description, skills, and additional details.
+    """
+    if not webhook_url or not job:
+        return False, "No webhook or job data"
+
+    message = format_job_thread_message(job)
+    return send_discord_webhook(webhook_url, message)
+

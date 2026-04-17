@@ -1,0 +1,386 @@
+{
+  "data": {
+    "search": {
+      "universalSearchNuxt": {
+        "visitorJobSearchV1": {
+          "paging": {
+            "total": 3526,
+            "offset": 0,
+            "count": 10
+          },
+          "results": [
+            {
+              "id": "2044982821178100137",
+              "title": "Looking To Create An AI App",
+              "description": "I am looking for a visionary AI Developer/Engineer to help build a custom AI application with the long-term goal of evolving it into a full-scale SaaS platform. The core functionality involves automated video and script generation. A primary technical goal is to utilize a Serverless Architecture to ensure the platform is highly scalable while keeping operational overhead at a minimum during the development and testing phases.\n\nThe Vision\n\nPhase 1: Serverless MVP. Build a functional Minimum Viable Product using serverless functions (e.g., AWS Lambda, Vercel, or Google Cloud Functions) to handle \"Script-to-Video\" automation with zero idle cost.\n\nPhase 2: Stress Testing & Optimization. Stress-test the app, squash bugs, and refine the UX while monitoring API consumption.\n\nPhase 3: SaaS Transition. Transition the architecture into a multi-tenant SaaS platform with subscription management, user dashboards, and auto-scaling capabilities.",
+              "ontologySkills": [
+                {
+                  "prefLabel": "Node.js"
+                },
+                {
+                  "prefLabel": "RESTful API"
+                },
+                {
+                  "prefLabel": "ChatGPT API"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2044982821178100137",
+                  "ciphertext": "~022044982821178100137",
+                  "jobType": "HOURLY",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": null,
+                  "hourlyBudgetMax": null,
+                  "fixedPriceAmount": null
+                }
+              }
+            },
+            {
+              "id": "2045020828031568297",
+              "title": "Senior Next.js Developer for SaaS Platform",
+              "description": "We're building a custom platform and internal operations platform for a digital marketing agency serving fitness studio brands. This replaces tools with a unified platform.\nWe need a senior developer to accelerate our launch. You'll work alongside our CTO and lead developer, building production features from detailed specs and implementation plans.",
+              "ontologySkills": [
+                {
+                  "prefLabel": "JavaScript"
+                },
+                {
+                  "prefLabel": "HTML5"
+                },
+                {
+                  "prefLabel": "jQuery"
+                },
+                {
+                  "prefLabel": "CSS 3"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2045020828031568297",
+                  "ciphertext": "~022045020828031568297",
+                  "jobType": "HOURLY",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": "15.0",
+                  "hourlyBudgetMax": "35.0",
+                  "fixedPriceAmount": null
+                }
+              }
+            },
+            {
+              "id": "2045018780233774802",
+              "title": "Integrate AI Assistant into SaaS Dashboard using Next.js, FastAPI, and OpenAI",
+              "description": "Our SaaS dashboard is built with Next.js and FastAPI. \nWe want to embed an AI-powered support assistant \nthat answers user questions based on our product \u2014 \nwithout redirecting them to external pages.\n\nWhat we need:\n\n\u2022 Floating chat widget integrated into the dashboard\n\u2022 FastAPI /assistant endpoint powered by GPT-4o\n\u2022 Per-user conversation memory stored in PostgreSQL\n\u2022 System prompt configured to match our product scope\n\nCurrent stack:\n\u2022 Frontend: Next.js\n\u2022 Backend: FastAPI (Python)\n\u2022 Database: PostgreSQL\n\u2022 AI: OpenAI API (GPT-4o)\n\nYou should know:\n\u2022 Solid experience with OpenAI API\n\u2022 Comfortable working inside an existing codebase\n\u2022 Next.js components + FastAPI endpoints\n\u2022 Readable, maintainable code\n\nDeliverables:\n\u2022 Chat widget component (drops into existing layout)\n\u2022 /assistant API endpoint with user-scoped history\n\u2022 Prompt configuration file\n\u2022 README with setup and customization guide",
+              "ontologySkills": [
+                {
+                  "prefLabel": "Python"
+                },
+                {
+                  "prefLabel": "React"
+                },
+                {
+                  "prefLabel": "JavaScript"
+                },
+                {
+                  "prefLabel": "Node.js"
+                },
+                {
+                  "prefLabel": "API"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2045018780233774802",
+                  "ciphertext": "~022045018780233774802",
+                  "jobType": "FIXED",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": null,
+                  "hourlyBudgetMax": null,
+                  "fixedPriceAmount": {
+                    "isoCurrencyCode": null,
+                    "amount": "20.0"
+                  }
+                }
+              }
+            },
+            {
+              "id": "2044970582224369245",
+              "title": "SaaS Sales Representative for Nonprofit Sector",
+              "description": "About Us\n\nPathways Group is building a powerful, easy-to-use SaaS platform designed to help small businesses, nonprofits, youth organizations, and community groups operate more effectively.\n\nOur system simplifies:\n\t\u2022\tBoard and organizational management\n\t\u2022\tCustomer and contact tracking (CRM)\n\t\u2022\tGroup communication and coordination\n\t\u2022\tFundraising and donation management\n\nWe serve the backbone of local communities\u2014small businesses, sports teams, and nonprofit organizations\u2014and give them tools typically reserved for large enterprises.\n\n\u2e3b\n\nThe Opportunity\n\nWe are looking for a motivated, relationship-driven Sales Representative who understands the needs of small businesses and/or nonprofits in the United States.\n\nThis is not a high-pressure, transactional sales role. It\u2019s about helping organizations solve real problems and become more organized, efficient, and successful.\n\nYou\u2019ll have the flexibility to shape your compensation structure based on your goals:\n\t\u2022\tBase + Commission\n\t\u2022\tOr high-percentage, performance-driven commission\n\n\u2e3b\n\nWhat You\u2019ll Do\n\t\u2022\tIdentify and connect with small businesses, nonprofits, and community organizations\n\t\u2022\tPresent and demonstrate the Pathways platform\n\t\u2022\tBuild relationships with decision-makers (owners, board members, directors)\n\t\u2022\tGuide prospects through the sales process from first contact to close\n\t\u2022\tFollow up and nurture leads through calls, texts, and email\n\t\u2022\tProvide feedback to help improve the product and messaging\n\n\u2e3b\n\nWho You Are\n\t\u2022\tFluent in English (spoken and written)\n\t\u2022\tStrong communicator with a natural ability to build trust\n\t\u2022\tExperience in sales, small business, nonprofits, or community organizations preferred\n\t\u2022\tComfortable talking with business owners, board members, and leadership teams\n\t\u2022\tSelf-motivated and able to work independently\n\t\u2022\tOrganized and consistent with follow-up\n\n\u2e3b\n\nWhat Makes You a Great Fit\n\t\u2022\tYou\u2019ve worked with or understand:\n\t\u2022\tSmall businesses\n\t\u2022\tNonprofits or fundraising organizations\n\t\u2022\tYouth sports teams or community groups\n\t\u2022\tYou can speak their language and understand their challenges\n\t\u2022\tYou enjoy helping people\u2014not just selling to them\n\n\u2e3b\n\nWhy Join Pathways Group\n\t\u2022\tFlexible compensation structure tailored to your goals\n\t\u2022\tOpportunity to grow with an early-stage, high-impact SaaS platform\n\t\u2022\tMeaningful work helping real organizations in your community\n\t\u2022\tFreedom to build your own pipeline and sales style\n\t\u2022\tPotential for long-term leadership or revenue share opportunities\n\n\u2e3b\n\nHow to Apply\n\nSend us:\n\t\u2022\tA short introduction about yourself\n\t\u2022\tYour experience (sales, nonprofit, or business-related)\n\t\u2022\tYour preferred compensation structure (Base + Commission or Commission Only",
+              "ontologySkills": [
+                {
+                  "prefLabel": "Lead Generation"
+                },
+                {
+                  "prefLabel": "Sales"
+                },
+                {
+                  "prefLabel": "Relationship Management"
+                },
+                {
+                  "prefLabel": "Cold Calling"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2044970582224369245",
+                  "ciphertext": "~022044970582224369245",
+                  "jobType": "HOURLY",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": "3.0",
+                  "hourlyBudgetMax": "25.0",
+                  "fixedPriceAmount": null
+                }
+              }
+            },
+            {
+              "id": "2045010073383302749",
+              "title": "AI Workflow / Backend Engineer (LLMs, RAG, Systems) for B2B SaaS",
+              "description": "**Role: AI Workflow / Backend Engineer for Operational B2B System**\n\nWe are building a B2B operational system that goes beyond a typical web app. This is not a standard CRUD product. The system processes real-world inputs (documents, requests, parts data), interprets them, and drives workflows forward with AI-assisted logic.\n\nWe are looking for an engineer who can work on the **core system layer**, not just UI features.\n\n---\n\n**What you\u2019ll actually work on**\n\n* Designing and improving **workflow logic (job states, transitions, resolution flows)**\n* Building **AI-assisted pipelines** (ingestion \u2192 extraction \u2192 validation \u2192 action)\n* Integrating **retrieval/memory systems (RAG)** into real workflows\n* Implementing **backend services** that handle:\n\n  * document parsing\n  * structured data extraction\n  * decision logic with confidence + fallback\n* Ensuring **reliability**:\n\n  * error handling\n  * retries\n  * logging / audit trails\n  * data integrity\n\n---\n\n**Tech stack (current)**\n\n* React (frontend already mostly built)\n* Node.js / Express\n* TypeScript\n* PostgreSQL\n\nYou do NOT need to be a frontend expert. This role is primarily **backend + systems + AI integration**.\n\n---\n\n**What we are NOT looking for**\n\n* Basic CRUD developers\n* \u201cAI wrapper\u201d builders who only connect APIs\n* No-code / automation tool specialists (Zapier, GHL, etc.)\n\n---\n\n**What we ARE looking for**\n\n* Experience building **real systems**, not just features\n* Strong backend thinking (data models, workflows, reliability)\n* Experience with one or more:\n\n  * Python (preferred for AI pipelines)\n  * FastAPI / Node services\n  * RAG systems / vector search\n  * LLM integrations with structured outputs\n* Ability to think in:\n\n  * states\n  * workflows\n  * failure modes\n  * system design\n\n---\n\n**Engagement structure**\n\nWe will start with a **small paid test task** focused on a real workflow problem (not a toy task).\nIf successful, this will lead to ongoing weekly work.\n\n---\n\n**Important**\n\nWhen applying, please include:\n\n1. A system you\u2019ve built (not just a website)\n2. A brief explanation of how it handled:\n\n   * data flow\n   * edge cases\n   * failure/retry logic\n3. Any experience with AI workflows, RAG, or automation systems",
+              "ontologySkills": [
+                {
+                  "prefLabel": "ExpressJS"
+                },
+                {
+                  "prefLabel": "TypeScript"
+                },
+                {
+                  "prefLabel": "PostgreSQL"
+                },
+                {
+                  "prefLabel": "API Integration"
+                },
+                {
+                  "prefLabel": "React"
+                },
+                {
+                  "prefLabel": "Node.js"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2045010073383302749",
+                  "ciphertext": "~022045010073383302749",
+                  "jobType": "HOURLY",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": "25.0",
+                  "hourlyBudgetMax": "40.0",
+                  "fixedPriceAmount": null
+                }
+              }
+            },
+            {
+              "id": "2044965013597040735",
+              "title": "Full-Stack Developer",
+              "description": "I am building a SAAS for SMB that combines lead response and payment recovery that integrates with Quickbooks, Outlook/Gmail and in V2 with a CRM like Hubspot in one platform.\n\nPlease see attached brief. I look forward to working with you.\n\nThank you in advance",
+              "ontologySkills": [
+                {
+                  "prefLabel": "React"
+                },
+                {
+                  "prefLabel": "Next.js"
+                },
+                {
+                  "prefLabel": "Node.js"
+                },
+                {
+                  "prefLabel": "OpenAI API"
+                },
+                {
+                  "prefLabel": "PostgreSQL"
+                },
+                {
+                  "prefLabel": "Twilio API"
+                },
+                {
+                  "prefLabel": "Stripe API"
+                },
+                {
+                  "prefLabel": "Supabase"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2044965013597040735",
+                  "ciphertext": "~022044965013597040735",
+                  "jobType": "HOURLY",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": null,
+                  "hourlyBudgetMax": null,
+                  "fixedPriceAmount": null
+                }
+              }
+            },
+            {
+              "id": "2045001871673131546",
+              "title": "Sales Closer - Unique compensation opportunity",
+              "description": "Hello,\n\nWe are building AdminBox, a SaaS product that helps people never miss important emails like bills, deadlines, or contracts.\n\nYou can sell:\n\ndirectly to consumers (B2C)\nor through professionals (B2B2C)\n\n\ud83d\udc49 Up to you.\n\nYour Role\nTalk to people\nIdentify admin stress (missed deadlines, bills, etc.)\nIntroduce AdminBox\nClose paying users\n\nCompensation (Key Part)\n\n\ud83d\udd25 First 20 users:\n\n\u20ac20 per closed paying user (one-time)\n\n\ud83d\udd01 After 20 users:\n\n\ud83d\udcb0 You keep the full \u20ac19.99/month per user you close\n\n\ud83d\udc49 As long as the subscription stays active, you keep earning.\n\nImportant\nNo investment required\nNot MLM\nNo recruiting others\n\nThis is direct sales of a real SaaS product.\n\nTo Apply\n\nSend:\n\nyour motivation\nany relevant experience\nhow you would approach your first users\n\nThank you.",
+              "ontologySkills": [
+                {
+                  "prefLabel": "Sales"
+                },
+                {
+                  "prefLabel": "Cold Calling"
+                },
+                {
+                  "prefLabel": "Scheduling"
+                },
+                {
+                  "prefLabel": "Outbound Sales"
+                },
+                {
+                  "prefLabel": "Telemarketing"
+                },
+                {
+                  "prefLabel": "Price & Quote Negotiation"
+                },
+                {
+                  "prefLabel": "Relationship Management"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2045001871673131546",
+                  "ciphertext": "~022045001871673131546",
+                  "jobType": "FIXED",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": null,
+                  "hourlyBudgetMax": null,
+                  "fixedPriceAmount": {
+                    "isoCurrencyCode": null,
+                    "amount": "800.0"
+                  }
+                }
+              }
+            },
+            {
+              "id": "2044995226377257498",
+              "title": "\ud83e\uddd1\u200d\ud83d\udcbb Senior PHP (Laravel) Developer \u2013 Architecture & Backend Expert",
+              "description": "Job Description\n\nWe are looking for a Senior PHP Developer with strong expertise in Laravel, MySQL, and backend architecture design to join our team.\n\nThe ideal candidate should have experience building scalable, production-grade systems, and be comfortable working across backend, frontend (basic), and server-level environments.\n\n\ud83c\udf0d Location Preference\n\nWe are specifically looking for developers based in:\n\nPhilippines\nSouth America (Brazil, Argentina, Colombia, etc.)\n\ud83d\udd27 Key Responsibilities\nDesign and develop scalable backend systems using Laravel\nArchitect and improve existing system structure and performance\nOptimize database queries and data models (MySQL)\nWork on API development and integrations\nHandle server-level tasks (deployment, debugging, performance tuning)\nCollaborate with team on feature planning and technical decisions\nEnsure clean, maintainable, and well-documented code\n\ud83d\udee0\ufe0f Required Skills\nStrong experience in PHP & Laravel (5+ years preferred)\nExpertise in MySQL (query optimization, indexing, schema design)\nGood knowledge of Tailwind CSS, HTML, CSS\nExperience with REST APIs and system integrations\nStrong understanding of system architecture and scalability\nExperience with server environments (Linux, AWS, or similar)\nFamiliarity with Git, CI/CD pipelines\n\u2b50 Nice to Have\nExperience with high-traffic systems / SaaS products\nKnowledge of Docker / DevOps workflows\nExperience in performance optimization and caching strategies\n\ud83e\udde0 What We\u2019re Looking For\nSomeone who can think architecturally, not just code\nAbility to identify bottlenecks and suggest improvements\nStrong problem-solving and ownership mindset\nGood communication and ability to work independently\n\ud83d\udccc Project Details\nLong-term opportunity\nOngoing feature development + system improvements\nFlexible working hours",
+              "ontologySkills": [
+                {
+                  "prefLabel": "Website Redesign"
+                },
+                {
+                  "prefLabel": "AI App Development"
+                },
+                {
+                  "prefLabel": "AI Model Integration"
+                },
+                {
+                  "prefLabel": "PHP"
+                },
+                {
+                  "prefLabel": "RESTful API"
+                },
+                {
+                  "prefLabel": "Laravel"
+                },
+                {
+                  "prefLabel": "MySQL"
+                },
+                {
+                  "prefLabel": "Software Architecture & Design"
+                },
+                {
+                  "prefLabel": "API"
+                },
+                {
+                  "prefLabel": "Custom PHP"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2044995226377257498",
+                  "ciphertext": "~022044995226377257498",
+                  "jobType": "HOURLY",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": "10.0",
+                  "hourlyBudgetMax": "15.0",
+                  "fixedPriceAmount": null
+                }
+              }
+            },
+            {
+              "id": "2044994218393745106",
+              "title": "Full-Stack Web Developer Needed \u2013 Dynamic, Production-Ready Website for Software Development Company",
+              "description": "\ud83d\udda5\ufe0f JOB TITLE: Full-Stack Web Developer Needed \u2013 Dynamic, Production-Ready Website for Software Development Company\n\n---\n\n\ud83d\udccc ABOUT METAVAUX LLC\n\nMetavaux LLC is a US-based software development company delivering custom software development, proprietary SaaS products, managed IT infrastructure, cloud services, and cybersecurity solutions to businesses across the US and internationally. We operate at the intersection of engineering excellence and business performance \u2014 and our website must reflect that.\n\n---\n\n\ud83d\udccb PROJECT OVERVIEW\n\nWe currently have a high-fidelity HTML/CSS prototype of our website and we need an experienced full-stack developer to transform it into a fully dynamic, production-ready website. The design language, brand identity, and content structure are already established. Your job is to bring it to life with a proper CMS, backend functionality, animations, and deployment.\n\n---\n\n\u2705 SCOPE OF WORK\n\n1. FRONTEND DEVELOPMENT\n- Pixel-perfect conversion of our existing HTML/CSS prototype into a fully responsive, dynamic website\n- Smooth scroll animations and micro-interactions (fade-ins, hover states, counters)\n- Fully mobile-responsive across all screen sizes and devices\n- Cross-browser compatibility (Chrome, Safari, Firefox, Edge)\n- Performance optimized (Lighthouse score 90+)\n\n2. CMS INTEGRATION\n- Integrate a headless or traditional CMS (Contentful, Sanity, or WordPress \u2014 open to recommendation)\n- Blog/Insights section with full CRUD capability\n- Case Studies section manageable without developer involvement\n- Services and Products pages editable via CMS\n\n3. BACKEND & FORMS\n- Fully functional Contact Form with email notifications (name, company, email, service interest, message)\n- Form validation and spam protection (reCAPTCHA or equivalent)\n- Backend API or serverless functions as needed\n\n4. PAGES REQUIRED\n- Home (Hero, Services, Why Us, Solutions, Process, Industries, CTA, Contact)\n- About Us (Company story, Team, Values)\n- Services (individual pages per service)\n- Products / SaaS Solutions\n- Case Studies\n- Blog / Insights\n- Careers\n- Contact\n- Legal pages (Privacy Policy, Terms of Service, Cookie Policy)\n\n5. INTEGRATIONS\n- Google Analytics 4\n- LinkedIn and GitHub social links\n- Cookie consent banner (GDPR compliant)\n- Optional: CRM integration (HubSpot or similar)\n\n6. SECURITY & COMPLIANCE\n- SSL/HTTPS configured\n- SOC 2 and ISO 27001 compliance messaging maintained throughout\n- Basic security headers and best practices implemented\n\n7. DEPLOYMENT\n- Deploy to production hosting (Vercel, Netlify, AWS, or equivalent)\n- Domain configuration at metavauxllc.com\n- CI/CD pipeline setup for future updates\n\n---\n\n\ud83d\udee0\ufe0f TECH STACK PREFERENCES\n(Open to discussion \u2014 suggest what best fits the scope)\n- Frontend: Next.js or React\n- Styling: Tailwind CSS\n- CMS: Contentful, Sanity, or WordPress Headless\n- Hosting: Vercel, Netlify, or AWS Amplify\n- Forms: EmailJS, Resend, or custom API\n\n---\n\n\ud83d\udce6 DELIVERABLES\n- Fully deployed, live production website\n- Clean, documented codebase pushed to a private GitHub repository\n- CMS configured with initial content loaded\n- Admin access and handover documentation\n- 30-day post-launch support for bug fixes\n\n---\n\n\ud83c\udfaf IDEAL CANDIDATE\n- 4+ years of full-stack web development experience\n- Strong portfolio of dynamic business/SaaS websites\n- Experience with headless CMS platforms\n- Eye for design detail \u2014 our brand is premium and technical\n- Strong communication and ability to meet deadlines\n- Bonus: experience building websites for tech or software companies\n\n---\n\n\ud83d\udcca PROJECT DETAILS\n- Project Type: Fixed Price (open to milestone-based)\n- Timeline: 4\u20136 weeks\n- Budget: $2,500 \u2013 $6,000 (depending on experience and proposed approach)\n- Start Date: Immediately upon hire\n\n---\n\n\ud83d\udce9 TO APPLY \u2014 PLEASE INCLUDE:\n1. Link to 2\u20133 relevant websites you have built (similar scope)\n2. Your proposed tech stack and a brief approach to this project\n3. Your estimated timeline broken down by milestone\n4. Your fixed price or milestone-based quote",
+              "ontologySkills": [
+                {
+                  "prefLabel": "Website Redesign"
+                },
+                {
+                  "prefLabel": "AI Agent Development"
+                },
+                {
+                  "prefLabel": "Web Development"
+                },
+                {
+                  "prefLabel": "PHP"
+                },
+                {
+                  "prefLabel": "Web Design"
+                },
+                {
+                  "prefLabel": "WordPress"
+                },
+                {
+                  "prefLabel": "Web Application"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2044994218393745106",
+                  "ciphertext": "~022044994218393745106",
+                  "jobType": "FIXED",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": null,
+                  "hourlyBudgetMax": null,
+                  "fixedPriceAmount": {
+                    "isoCurrencyCode": null,
+                    "amount": "400.0"
+                  }
+                }
+              }
+            },
+            {
+              "id": "2044983648101728794",
+              "title": "AWS Founding DevOps Engineer \u2014 Compliance SaaS Platform",
+              "description": "\ud83d\ude80 Hiring: AWS Founding DevOps Engineer \u2014 Compliance SaaS Platform\n\nI am the founder of Govara (govara.io), a compliance verification and trust infrastructure platform currently in UAT and preparing for production deployment. I am looking for an experienced AWS DevOps engineer to join as our founding infrastructure person \u2014 someone who wants to be part of building something from the ground up and is in it for the long haul.\n\nThis is not a one-off contract. This is not a short term gig. I am looking for someone who wants to grow with the product, be part of the day to day operation, and take real ownership of our infrastructure as we scale from pre-launch to a live, revenue-generating platform.\n\nThis is not a co-founder role and not a backend development role. It is a focused infrastructure role for someone who is excellent at what they do, communicates clearly every day, and takes pride in keeping a serious product running securely and reliably.\n\nWhat you will own:\n\nAWS environment management (ECS, ALB), Docker and containerization, CI/CD pipeline setup and maintenance, IAM and access control with least privilege and environment separation, deployment management across staging, UAT, and production environments, monitoring and alerting, and overall infrastructure security posture. This is a compliance platform handling sensitive client data \u2014 infrastructure security is not optional and will be taken seriously.\n\nWhat you will not own:\n\nApplication code belongs to our backend developer. You will not have merge rights on the application repository and will not be involved in product or business decisions.\n\nThe stack:\n\nAWS (ECS and ALB), Docker, Python and Django backend, GitHub.\n\nWhat I am looking for:\n\nProven AWS ECS experience is non-negotiable. You need strong Docker knowledge, CI/CD pipeline experience, and a security-first mindset \u2014 you understand least privilege, IAM best practices, and segregation of duties. Most importantly I need someone who communicates clearly and consistently. I am a non-technical founder and I need a DevOps partner who flags issues early, explains what they are doing, and shows up every day. If you go dark for days at a time this is not the right fit. Day to day communication is a core part of this role, not an afterthought.\n\nEngagement details:\n\nFractional contractor at approximately 5 to 15 hours per week with the expectation of growing into a longer term role as the product scales.\n\nAbout Govara:\n\nGovara is a compliance verification and trust infrastructure platform purpose-built for AI governance and security compliance. We cover ISO 42001, ISO 27001, GDPR, EU AI Act, and NIST AI RMF. We are pre-launch and moving toward production deployment. The platform is architecturally built, the commercial model is defined, and we are focused on getting across the finish line and into the hands of paying clients. You would be joining at the most exciting stage \u2014 early enough to shape how the infrastructure is built, late enough that the product is real.\n\nTo apply:\n\nSend a short message with your AWS and ECS experience, a brief description of a relevant project you have worked on, and your availability. Thank you very much!",
+              "ontologySkills": [
+                {
+                  "prefLabel": "DevOps"
+                },
+                {
+                  "prefLabel": "Amazon Web Services"
+                },
+                {
+                  "prefLabel": "CI/CD"
+                },
+                {
+                  "prefLabel": "Docker"
+                },
+                {
+                  "prefLabel": "Amazon ECS"
+                },
+                {
+                  "prefLabel": "Amazon EC2"
+                }
+              ],
+              "jobTile": {
+                "job": {
+                  "id": "2044983648101728794",
+                  "ciphertext": "~022044983648101728794",
+                  "jobType": "HOURLY",
+                  "weeklyRetainerBudget": null,
+                  "hourlyBudgetMin": "20.0",
+                  "hourlyBudgetMax": "40.0",
+                  "fixedPriceAmount": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

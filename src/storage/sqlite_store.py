@@ -170,3 +170,27 @@ class SQLiteStore:
                 (title, payload_json, now, job_id, query),
             )
             return False
+
+    def cleanup_old_records(self, jobs_max_age_days: int = 14, poll_runs_max_age_days: int = 14) -> dict[str, int]:
+        """Delete stale rows to keep DB size bounded for long-running bots."""
+        now = time.time()
+        jobs_cutoff = now - (max(1, jobs_max_age_days) * 24 * 3600)
+        poll_cutoff = now - (max(1, poll_runs_max_age_days) * 24 * 3600)
+        with self._connect() as conn:
+            jobs_deleted = conn.execute(
+                "DELETE FROM jobs WHERE last_seen_at < ?",
+                (jobs_cutoff,),
+            ).rowcount
+            polls_deleted = conn.execute(
+                "DELETE FROM poll_runs WHERE started_at < ?",
+                (poll_cutoff,),
+            ).rowcount
+            cache_deleted = conn.execute(
+                "DELETE FROM job_id_cache WHERE updated_at < ?",
+                (jobs_cutoff,),
+            ).rowcount
+        return {
+            "jobs_deleted": int(jobs_deleted or 0),
+            "poll_runs_deleted": int(polls_deleted or 0),
+            "job_id_cache_deleted": int(cache_deleted or 0),
+        }

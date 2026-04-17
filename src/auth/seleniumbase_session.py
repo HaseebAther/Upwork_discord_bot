@@ -71,17 +71,17 @@ def refresh_cookies_with_seleniumbase(url: str, timeout_seconds: int = 40) -> Di
 
     result = {}
     try:
-        # uc=True uses undetected-chromedriver. headless=False for debugging visibility.
-        with SB(uc=True, headless=False) as sb:
+        # uc=True uses undetected-chromedriver. headless=True for background operation (no visible window)
+        with SB(uc=True, headless=True) as sb:
             # Step 1: Visit homepage first to initialize session
             print("[1] Visiting Upwork homepage...")
             sb.open("https://www.upwork.com/")
-            sb.sleep(3)
+            sb.sleep(2)
 
             # Step 2: Visit job search to trigger token generation
             print("[2] Visiting job search page...")
             sb.open(url)
-            sb.sleep(5)
+            sb.sleep(3)
 
             # Step 3: Poll for token up to 40 seconds (they check localStorage/sessionStorage!)
             print("[3] Polling for tokens in browser storage...")
@@ -118,7 +118,7 @@ def refresh_cookies_with_seleniumbase(url: str, timeout_seconds: int = 40) -> Di
             if not token:
                 print("[4] Token not found in first pass, trying alternate search...")
                 sb.open("https://www.upwork.com/nx/search/jobs/?q=python&sort=recency")
-                sb.sleep(4)
+                sb.sleep(2)
 
                 for poll_iter in range(20):
                     try:
@@ -153,6 +153,10 @@ def refresh_cookies_with_seleniumbase(url: str, timeout_seconds: int = 40) -> Di
                 value = item.get("value")
                 if name and value:
                     result[str(name)] = str(value)
+            
+            # Remove the raw cookies list after extracting individual cookies
+            if "cookies" in result:
+                del result["cookies"]
 
     except BaseException as exc:
         print(f"SeleniumBase refresh failed: {exc}")

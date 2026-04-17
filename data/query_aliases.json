@@ -1,0 +1,5 @@
+﻿{
+  "python": ["python", "python3", "py", "py3"],
+  "react": ["react", "reactjs", "react js", "react-js"],
+  "web development": ["web", "web dev", "web develope", "web developer", "web development", "web developement"]
+}
