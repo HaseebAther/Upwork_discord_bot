@@ -69,7 +69,76 @@ def refresh_cookies_with_seleniumbase(url: str, timeout_seconds: int = 40) -> Di
         print(f"SeleniumBase not available: {exc}")
         return {}
 
-    result = {}
+    result: Dict[str, str] = {}
+
+    def collect_browser_cookies(sb) -> list[dict]:
+        """
+        Collect the broadest cookie set available:
+        1) selenium get_cookies() for current context
+        2) CDP Network.getAllCookies() for full browser jar (includes httpOnly/path/domain scoped cookies)
+        """
+        merged: dict[tuple[str, str, str], dict] = {}
+
+        try:
+            for c in sb.get_cookies() or []:
+                key = (str(c.get("name", "")), str(c.get("domain", "")), str(c.get("path", "/")))
+                merged[key] = c
+        except Exception:
+            pass
+
+        try:
+            # Ensure cookie domain contexts are warmed.
+            sb.open("https://www.upwork.com/")
+            sb.sleep(1)
+            cdp_res = sb.driver.execute_cdp_cmd("Network.getAllCookies", {})
+            for c in (cdp_res or {}).get("cookies", []):
+                normalized = {
+                    "name": c.get("name"),
+                    "value": c.get("value"),
+                    "domain": c.get("domain"),
+                    "path": c.get("path", "/"),
+                    "secure": c.get("secure"),
+                    "httpOnly": c.get("httpOnly"),
+                    "expires": c.get("expires"),
+                }
+                key = (
+                    str(normalized.get("name", "")),
+                    str(normalized.get("domain", "")),
+                    str(normalized.get("path", "/")),
+                )
+                merged[key] = normalized
+        except Exception:
+            pass
+
+        return list(merged.values())
+
+    def merge_storage_candidates(local_storage: dict, session_storage: dict) -> None:
+        """
+        Capture potentially relevant auth/session values from browser storage.
+        We keep keys that commonly contain auth/session tokens and also token-like values.
+        """
+        for store in (local_storage or {}, session_storage or {}):
+            if not isinstance(store, dict):
+                continue
+            for key, value in store.items():
+                k = str(key or "").strip()
+                if not k:
+                    continue
+                v = str(value or "").strip()
+                if not v:
+                    continue
+                k_lower = k.lower()
+                looks_relevant_key = any(
+                    marker in k_lower
+                    for marker in ("token", "oauth", "visitor", "xsrf", "csrf", "nuxt", "upwork")
+                )
+                looks_relevant_value = (
+                    v.startswith("oauth2v2_")
+                    or v.startswith("oauth2v2_int_")
+                    or (v.startswith("eyJ") and len(v) > 60)
+                )
+                if looks_relevant_key or looks_relevant_value:
+                    result[k] = v
     try:
         # uc=True uses undetected-chromedriver. headless=True for background operation (no visible window)
         with SB(uc=True, headless=True) as sb:
@@ -101,10 +170,13 @@ def refresh_cookies_with_seleniumbase(url: str, timeout_seconds: int = 40) -> Di
                     session_storage = {}
 
                 # Get cookies
-                browser_cookies = sb.get_cookies()
+                browser_cookies = collect_browser_cookies(sb)
                 cookie_map = {c["name"]: c["value"] for c in browser_cookies}
 
-                # Extract token from all sources
+                # Keep additional storage tokens/keys for session completeness
+                merge_storage_candidates(local_storage, session_storage)
+
+                # Extract primary token from all sources
                 token = _extract_token_from_storage(local_storage, session_storage, cookie_map)
                 if token:
                     print(f"[✓] Token found after {poll_iter + 1} seconds")
@@ -132,9 +204,10 @@ def refresh_cookies_with_seleniumbase(url: str, timeout_seconds: int = 40) -> Di
                         local_storage = {}
                         session_storage = {}
 
-                    browser_cookies = sb.get_cookies()
+                    browser_cookies = collect_browser_cookies(sb)
                     cookie_map = {c["name"]: c["value"] for c in browser_cookies}
 
+                    merge_storage_candidates(local_storage, session_storage)
                     token = _extract_token_from_storage(local_storage, session_storage, cookie_map)
                     if token:
                         print(f"[✓] Token found on retry after {poll_iter + 1} seconds")
@@ -148,11 +221,16 @@ def refresh_cookies_with_seleniumbase(url: str, timeout_seconds: int = 40) -> Di
                 return {}
 
             # Build final result dict with cookies
+            cookie_names: list[str] = []
             for item in result.get("cookies", []):
                 name = item.get("name")
                 value = item.get("value")
                 if name and value:
-                    result[str(name)] = str(value)
+                    cookie_name = str(name)
+                    result[cookie_name] = str(value)
+                    cookie_names.append(cookie_name)
+            # Used by merge layer to avoid treating storage keys as cookies.
+            result["_cookie_names"] = cookie_names
             
             # Remove the raw cookies list after extracting individual cookies
             if "cookies" in result:
@@ -164,7 +242,7 @@ def refresh_cookies_with_seleniumbase(url: str, timeout_seconds: int = 40) -> Di
 
     key_names = ["cf_clearance", "__cf_bm", "visitor_gql_token", "UniversalSearchNuxt_vt", "XSRF-TOKEN"]
     present = [name for name in key_names if name in result]
-    print(f"SeleniumBase captured {len(result)} items; key cookies present: {present}")
+    print(f"SeleniumBase captured {len(result)} items; key cookies/tokens present: {present}")
     return result
 
 

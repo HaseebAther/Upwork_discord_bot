@@ -2,8 +2,6 @@
 
 import asyncio
 from collections import deque
-import concurrent.futures
-import copy
 import json
 import os
 import random
@@ -12,13 +10,14 @@ import threading
 import time
 from pathlib import Path
 from datetime import datetime
+from types import SimpleNamespace
 
 import discord
 from discord.ext import commands
 
-from src.auth.session_coordinator import refresh_capture_file
+from src.auth.managed_session import ManagedUpworkSession
 from src.discord_bot.bot import UpworkBot
-from src.upwork.job_search_client import fetch_from_capture_data
+from src.upwork.job_search_client import apply_query_override
 from src.formatting.response_formatter import format_response
 from src.storage import SQLiteStore
 from src.upwork.capture_loader import load_capture_dicts
@@ -36,8 +35,7 @@ class UpworkBotRunner:
         self.should_stop = False
         self.logger = get_logger("discord_bot")
         self.bot_loop: asyncio.AbstractEventLoop | None = None
-        self.auth_preflight_query = os.getenv("AUTH_PREFLIGHT_QUERY", "python")
-        self.auth_preflight_enabled = os.getenv("AUTH_PREFLIGHT_ENABLED", "false").strip().lower() in {"1", "true", "yes", "on"}
+        self.startup_force_refresh = os.getenv("STARTUP_FORCE_REFRESH", "true").strip().lower() in {"1", "true", "yes", "on"}
         self.relevance_filter_enabled = os.getenv("RELEVANCE_FILTER_ENABLED", "true").strip().lower() in {"1", "true", "yes", "on"}
         self.query_token_min_len = int(os.getenv("QUERY_TOKEN_MIN_LEN", "3"))
         self.query_stop_words = {
@@ -112,8 +110,6 @@ class UpworkBotRunner:
         channel_validate_every_polls = int(os.getenv("CHANNEL_VALIDATE_EVERY_POLLS", "3"))
         error_retry_min_seconds = int(os.getenv("ERROR_RETRY_MIN_SECONDS", "2"))
         error_retry_max_seconds = int(os.getenv("ERROR_RETRY_MAX_SECONDS", "5"))
-        max_concurrent_fetches = int(os.getenv("MAX_CONCURRENT_FETCHES", "3"))
-
         self.logger.info("=" * 60)
         self.logger.info("UPWORK POLLING LOOP STARTED")
         self.logger.info("=" * 60)
@@ -124,11 +120,14 @@ class UpworkBotRunner:
         )
         self.logger.info("DB cleanup stats: %s", cleanup_stats)
 
-        # Cookie refresh strategy
-        last_refresh_time = time.time()
-        refresh_interval = random.randint(8 * 3600, 10 * 3600)  # 8-10 hours in seconds
-        next_refresh_time = last_refresh_time + refresh_interval
-        print(f"🍪 Cookies loaded. Next refresh in {refresh_interval // 3600} hours")
+        # Long-lived managed session: refresh only on interval or auth failure.
+        managed_session = ManagedUpworkSession(refresh_interval_hours=9)
+        if self.startup_force_refresh:
+            self.logger.info("Running startup managed session refresh...")
+            if not managed_session.force_refresh():
+                self.logger.warning("Startup managed session refresh failed.")
+            else:
+                self.logger.info("Startup managed session refresh succeeded.")
         
         # Keep track of seen jobs per query in bounded memory structures:
         # - set for O(1) lookup
@@ -196,74 +195,33 @@ class UpworkBotRunner:
 
             try:
                 shared_capture = load_capture_dicts(capture_file)
-                print("✓ Session capture loaded (shared across all queries this poll)")
+                print("✓ Base payload loaded")
             except Exception as e:
                 print(f"❌ Failed to load capture: {e}")
                 self.logger.error(f"Failed to load capture: {e}")
                 time.sleep(30)
                 continue
 
-            # Auth/session preflight on first poll and periodic intervals.
-            if self.auth_preflight_enabled and (poll_count == 1 or (poll_count % 50 == 0)):
-                try:
-                    preflight = fetch_from_capture_data(
-                        capture_data=shared_capture,
-                        upwork_url=upwork_url,
-                        user_query=self.auth_preflight_query,
-                        use_seleniumbase_on_403=True,
-                        capture_path=capture_file,
-                    )
-                    self.logger.info(
-                        "Auth preflight query='%s' status=%s client=%s",
-                        self.auth_preflight_query,
-                        preflight.status_code,
-                        preflight.client_used,
-                    )
-                except Exception as e:
-                    self.logger.warning("Auth preflight failed: %s", e)
-
-            # Proactive session refresh once per poll round (not per keyword)
-            if time.time() >= next_refresh_time:
-                print(f"🔄 Scheduled cookie refresh (every {refresh_interval // 3600} hours)...")
-                self.logger.info("Running scheduled cookie refresh")
-                try:
-                    if refresh_capture_file(capture_file):
-                        shared_capture = load_capture_dicts(capture_file)
-                        print("✅ Session capture refreshed on disk and reloaded")
-                        last_refresh_time = time.time()
-                        refresh_interval = random.randint(8 * 3600, 10 * 3600)
-                        next_refresh_time = last_refresh_time + refresh_interval
-                        print(f"🍪 Next refresh in {refresh_interval // 3600} hours")
-                    else:
-                        print("⚠️ Scheduled refresh did not obtain new session data")
-                except Exception as e:
-                    print(f"⚠️ Scheduled refresh failed: {e}")
-                    self.logger.error(f"Scheduled cookie refresh failed: {e}")
+            if not managed_session.refresh_if_needed():
+                self.logger.warning("Periodic managed session refresh failed.")
 
             for query in active_queries:
                 if query not in seen_jobs_by_query:
                     seen_jobs_by_query[query] = set()
                     seen_jobs_order_by_query[query] = deque(maxlen=seen_cache_limit)
 
-            # Fetch queries concurrently (bounded worker pool).
+            # Fetch each query with a single shared authenticated session.
             fetch_results: dict[str, tuple] = {}
-            with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, max_concurrent_fetches)) as executor:
-                future_map = {
-                    executor.submit(
-                        self._fetch_query_once,
-                        query,
-                        copy.deepcopy(shared_capture),
-                        capture_file,
-                        upwork_url,
-                    ): query
-                    for query in active_queries
-                }
-                for future in concurrent.futures.as_completed(future_map):
-                    query = future_map[future]
-                    try:
-                        fetch_results[query] = future.result()
-                    except Exception as e:
-                        fetch_results[query] = (None, False, [], e)
+            for query in active_queries:
+                try:
+                    fetch_results[query] = self._fetch_query_once(
+                        query=query,
+                        capture_data=shared_capture,
+                        upwork_url=upwork_url,
+                        managed_session=managed_session,
+                    )
+                except Exception as e:
+                    fetch_results[query] = (None, False, [], e)
 
             # Process results in main thread (DB, cache, posting).
             for query in active_queries:
@@ -449,16 +407,39 @@ class UpworkBotRunner:
         searchable = f"{title} {desc} {skills}"
         return all(k in searchable for k in keywords)
 
-    def _fetch_query_once(self, query: str, capture_data: dict, capture_file: Path, upwork_url: str):
-        """Single-query fetch worker used by thread pool."""
+    def _fetch_query_once(
+        self,
+        query: str,
+        capture_data: dict,
+        upwork_url: str,
+        managed_session: ManagedUpworkSession,
+    ):
+        """Single-query fetch worker using managed shared session."""
         print(f"\n🔍 SEARCHING: '{query}'...")
         print(f"⏳ Fetching from Upwork for '{query}'...")
-        result = fetch_from_capture_data(
-            capture_data=capture_data,
-            upwork_url=upwork_url,
-            user_query=query,
-            use_seleniumbase_on_403=True,
-            capture_path=capture_file,
+        base_payload = capture_data.get("json_data") or {}
+        params = capture_data.get("params") or {}
+        payload = apply_query_override(base_payload, query)
+
+        response = managed_session.post_graphql(upwork_url, params, payload, timeout=40)
+        if response.status_code in {401, 403}:
+            self.logger.warning(
+                "Auth failed for query '%s' (status %s), attempting one refresh.",
+                query,
+                response.status_code,
+            )
+            if managed_session.force_refresh():
+                response = managed_session.post_graphql(upwork_url, params, payload, timeout=40)
+
+        try:
+            body = response.json()
+        except Exception:
+            body = {"raw_text": (response.text or "")[:1000]}
+
+        result = SimpleNamespace(
+            status_code=response.status_code,
+            body=body,
+            client_used="managed_session",
         )
         graphql_has_errors = (
             result.status_code == 200

@@ -20,6 +20,61 @@ DEFAULT_REFRESH_SEARCH_URL = "https://www.upwork.com/nx/search/jobs/"
 _refresh_lock = threading.Lock()
 
 
+def _is_useful_cookie(name: str, value: str) -> bool:
+    """Keep auth/session cookies and drop noisy telemetry/ads cookies."""
+    n = (name or "").strip()
+    if not n:
+        return False
+    v = (value or "").strip()
+    if not v:
+        return False
+    if len(v) > 1200:
+        return False
+
+    lower = n.lower()
+    blocked_markers = (
+        "snowplow",
+        "_vwo",
+        "analytics",
+        "guest_id",
+        "personalization",
+        "forter",
+        "ttcsid",
+        "_ttp",
+        "_ga",
+        "_fbp",
+        "muid",
+        "bcookie",
+        "li_",
+        "optanon",
+    )
+    if any(marker in lower for marker in blocked_markers):
+        return False
+
+    allow_exact = {
+        "cf_clearance",
+        "__cf_bm",
+        "visitor_gql_token",
+        "UniversalSearchNuxt_vt",
+        "XSRF-TOKEN",
+        "odesk_csrf_token",
+        "oauth2_global_js_token",
+        "country_code",
+        "visitor_id",
+        "x-spec-id",
+    }
+    if n in allow_exact:
+        return True
+
+    allow_prefixes = (
+        "_upw_ses",
+        "_upw_id",
+        "oauth2v2_",
+        "oauth2_",
+    )
+    return any(n.startswith(prefix) for prefix in allow_prefixes)
+
+
 def merge_refresh_into_capture(capture: dict[str, Any], refreshed: dict[str, Any]) -> None:
     """
     Merge SeleniumBase refresh payload into capture (mutates capture).
@@ -33,10 +88,24 @@ def merge_refresh_into_capture(capture: dict[str, Any], refreshed: dict[str, Any
     headers: dict[str, Any] = dict(capture.get("headers") or {})
 
     token = refreshed.get("token")
-    for key, value in refreshed.items():
-        if key == "token" or value is None or value == "":
-            continue
-        cookies[str(key)] = str(value)
+    cookie_names = refreshed.get("_cookie_names")
+    if isinstance(cookie_names, list) and cookie_names:
+        # Strict mode: only merge keys that came from browser cookies.
+        for key in cookie_names:
+            if key in refreshed and refreshed.get(key):
+                cookie_key = str(key)
+                cookie_val = str(refreshed.get(key))
+                if _is_useful_cookie(cookie_key, cookie_val):
+                    cookies[cookie_key] = cookie_val
+    else:
+        # Backward-compatible fallback for older refresh payloads.
+        for key, value in refreshed.items():
+            if key in {"token", "_cookie_names"} or value is None or value == "":
+                continue
+            cookie_key = str(key)
+            cookie_val = str(value)
+            if _is_useful_cookie(cookie_key, cookie_val):
+                cookies[cookie_key] = cookie_val
 
     if token:
         t = str(token).strip()
